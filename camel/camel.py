@@ -20,12 +20,25 @@ if not LIB_PATH in sys.path:
     sys.path.append(LIB_PATH)
     print(LIB_PATH + ' has been added to sys.path')
 
-# import os
-import matplotlib.pyplot as plt
-from utils import folder_utils as fu
+import os
+from glob import glob
+import numpy as np
+# import matplotlib.pyplot as plt
+import yaml
+from utils import io_utils as io
 
+with open(PROJECT_PATH + "config.yml", "r") as ymlfile:
+    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
+# print(cfg["exec"]["section"])
 # run params
-SECTION = 'camel'
-RUN_ID = '005'
+exec = cfg['exec']
+static = cfg['static']
 
-fu.prepare_result_folders(PROJECT_PATH, SECTION, RUN_ID)
+
+io.prepare_result_folders(PROJECT_PATH, exec['section'], exec['run_id'])
+
+mypath = os.path.join(PROJECT_PATH, exec['data_folder'])
+filenames = np.array(glob(os.path.join(mypath, '*.*')))
+print(mypath)
+print(filenames)

@@ -10,3 +10,5 @@ def prepare_result_folders(project_path, section, run_id):
     # os.mkdir(os.path.join(RUN_FOLDER, 'viz'))
     os.mkdir(os.path.join(RUN_FOLDER, 'images'))
     os.mkdir(os.path.join(RUN_FOLDER, 'weights'))
+
+# def load_data()
