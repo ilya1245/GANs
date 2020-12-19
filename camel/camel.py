@@ -33,7 +33,7 @@ with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
 exec = cfg['exec']
 io.cfg = cfg['io']
 io.project_root = PROJECT_ROOT
-io.prepare_result_folders()
+a = io.prepare_run_folders()
 io.load_camel_data()
 
 # data_path = os.path.join(PROJECT_ROOT, io.cfg['data_folder'], io.cfg['data_file'])

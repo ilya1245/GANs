@@ -1,12 +1,14 @@
 io:
-  data_folder: data
+  data_folder: 'data'
   data_file: full_numpy_bitmap_camel.npy
-  section: camel
-  run_id: '006'
+  section: gan
+  data_name: camel
+  run_id: '007'
+  image_quantity: 80000
 
 exec:
   mode: build
-  image_quantity: 80000
+
 
 
 
