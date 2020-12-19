@@ -9,11 +9,11 @@ except:
     COLAB = False
 
 if COLAB:
-    PROJECT_PATH = "/content/drive/My Drive/Colab Notebooks/Generative Deep Learning - kuboko/"
-    LIB_PATH = PROJECT_PATH
+    PROJECT_ROOT = "/content/drive/My Drive/Colab Notebooks/Generative Deep Learning - kuboko"
 else:
-    PROJECT_PATH = "../"
-    LIB_PATH = "../"
+    PROJECT_ROOT = "../"
+
+LIB_PATH = PROJECT_ROOT
 
 import sys
 if not LIB_PATH in sys.path:
@@ -27,18 +27,13 @@ import numpy as np
 import yaml
 from utils import io_utils as io
 
-with open(PROJECT_PATH + "config.yml", "r") as ymlfile:
+with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-# print(cfg["exec"]["section"])
-# run params
 exec = cfg['exec']
-static = cfg['static']
+io.cfg = cfg['io']
+io.project_root = PROJECT_ROOT
+io.prepare_result_folders()
+io.load_camel_data()
 
-
-io.prepare_result_folders(PROJECT_PATH, exec['section'], exec['run_id'])
-
-mypath = os.path.join(PROJECT_PATH, exec['data_folder'])
-filenames = np.array(glob(os.path.join(mypath, '*.*')))
-print(mypath)
-print(filenames)
+# data_path = os.path.join(PROJECT_ROOT, io.cfg['data_folder'], io.cfg['data_file'])

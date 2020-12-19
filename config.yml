@@ -1,13 +1,16 @@
-exec:
-  section: camel
-  run_id: '008'
-  mode: build
+io:
   data_folder: data
   data_file: full_numpy_bitmap_camel.npy
+  section: camel
+  run_id: '006'
 
-static:
-  a1: qwe
-  a2: asd
+exec:
+  mode: build
+  image_quantity: 80000
+
+
+
+
 
 
 
