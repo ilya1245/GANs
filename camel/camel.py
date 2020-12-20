@@ -16,6 +16,7 @@ else:
 LIB_PATH = PROJECT_ROOT
 
 import sys
+
 if not LIB_PATH in sys.path:
     sys.path.append(LIB_PATH)
     print(LIB_PATH + ' has been added to sys.path')
@@ -28,6 +29,7 @@ import yaml
 from util import io_utils as io
 from model.generator import Generator
 from model.discriminator import Discriminator
+import model.adversarial as adversarial
 
 with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
@@ -68,3 +70,6 @@ discriminator = Discriminator(
 
 dis_model = discriminator.model
 dis_model.summary()
+
+adv_model = adversarial.build(generator, discriminator)
+adv_model.summary()

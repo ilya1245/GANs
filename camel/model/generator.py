@@ -8,7 +8,7 @@ from tensorflow.keras.utils import plot_model
 from tensorflow.keras.initializers import RandomNormal
 
 import numpy as np
-import util.gan_utils as gu
+import util.model_utils as mu
 
 
 # from util.gan_utils import get_activation_layer
@@ -57,7 +57,7 @@ class Generator():
         if self.batch_norm_momentum:
             x = BatchNormalization(momentum=self.batch_norm_momentum)(x)
 
-        x = gu.get_activation_layer(self.activation)(x)
+        x = mu.get_activation_layer(self.activation)(x)
 
         x = Reshape(self.initial_dense_layer_size)(x)
 
@@ -70,7 +70,7 @@ class Generator():
 
     def _compile(self):
         self.model.compile(
-            optimizer=gu.get_opti(self.optimiser, self.learning_rate)
+            optimizer=mu.get_opti(self.optimiser, self.learning_rate)
             , loss='binary_crossentropy'
             , metrics=['accuracy']
         )
@@ -99,7 +99,7 @@ class Generator():
             if i < len(self.conv_filters) - 1:
                 if self.batch_norm_momentum:
                     x = BatchNormalization(momentum=self.batch_norm_momentum)(x)
-                x = gu.get_activation_layer(self.activation)(x)
+                x = mu.get_activation_layer(self.activation)(x)
             else:
                 x = Activation('tanh')(x)
 

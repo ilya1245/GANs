@@ -8,7 +8,7 @@ from tensorflow.keras.utils import plot_model
 from tensorflow.keras.initializers import RandomNormal
 
 import numpy as np
-import util.gan_utils as gu
+import util.model_utils as gu
 
 
 class Discriminator():

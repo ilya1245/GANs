@@ -1,5 +1,6 @@
 from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, BatchNormalization, LeakyReLU, Dropout, ZeroPadding2D, UpSampling2D
 from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.models import Model, Sequential
 
 
 def get_activation_layer(activation):
@@ -18,3 +19,8 @@ def get_opti(optimiser, lr):
         opti = Adam(lr=lr)
 
     return opti
+
+def set_trainable(model: Model , val):
+    model.trainable = val
+    for l in model.layers:
+        l.trainable = val
