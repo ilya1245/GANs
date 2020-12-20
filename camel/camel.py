@@ -25,7 +25,8 @@ from glob import glob
 import numpy as np
 # import matplotlib.pyplot as plt
 import yaml
-from utils import io_utils as io
+from util import io_utils as io
+from model.generator import Generator
 
 with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
@@ -36,4 +37,16 @@ io.project_root = PROJECT_ROOT
 a = io.prepare_run_folders()
 io.load_camel_data()
 
-# data_path = os.path.join(PROJECT_ROOT, io.cfg['data_folder'], io.cfg['data_file'])
+generator = Generator(initial_dense_layer_size=(7, 7, 64)
+                      , upsample=[2, 2, 1, 1]
+                      , conv_filters=[128, 64, 64, 1]
+                      , conv_kernel_size=[5, 5, 5, 5]
+                      , conv_strides=[1, 1, 1, 1]
+                      , batch_norm_momentum=0.9
+                      , activation='relu'
+                      , dropout_rate=None
+                      , learning_rate=0.0004
+                      , optimiser='rmsprop'
+                      , z_dim=100)
+
+generator.model.summary()
