@@ -50,7 +50,7 @@ class Generator():
         self._compile()
 
     def _build(self):
-        logger.debug("%s method is started", '_build')
+        logger.debug("%s method is started", self._build.__name__)
         input = Input(shape=self.z_dim)
 
         x = Dense(np.prod(self.initial_dense_layer_size), kernel_initializer=self.weight_init)(input)

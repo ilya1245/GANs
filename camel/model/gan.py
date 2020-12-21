@@ -33,6 +33,7 @@ class Gan():
         self._compile()
 
     def _build(self):
+        logger.debug("%s method is started", self._build.__name__)
         gen_model = self.generator.model
         dis_model = self.discriminator.model
         mu.set_trainable(dis_model, False)
@@ -48,13 +49,13 @@ class Gan():
         mu.set_trainable(dis_model, True)
 
     def train_generator(self, batch_size):
-        logger.debug("%s method is started", 'train_generator')
+        logger.debug("%s method is started", self.train_generator.__name__)
         valid = np.ones((batch_size,1))
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         return self.model.train_on_batch(noise, valid)
 
     def train_discriminator(self, x_train, batch_size, using_generator):
-
+        logger.debug("%s method is started", self.train_discriminator.__name__)
         valid = np.ones((batch_size,1))
         fake = np.zeros((batch_size,1))
 
@@ -76,10 +77,8 @@ class Gan():
 
         return [d_loss, d_loss_real, d_loss_fake, d_acc, d_acc_real, d_acc_fake]
 
-    def train(self, x_train, batch_size, epochs, run_folder
-              , print_every_n_batches=50
-              , using_generator=False):
-
+    def train(self, x_train, batch_size, epochs, run_folder, print_every_n_batches=50, using_generator=False):
+        logger.debug("%s method is started", self.train.__name__)
         for epoch in range(self.epoch, self.epoch + epochs):
 
             d = self.train_discriminator(x_train, batch_size, using_generator)
@@ -101,6 +100,7 @@ class Gan():
             self.epoch += 1
 
     def sample_images(self, run_folder):
+        logger.debug("%s method is started", self.sample_images.__name__)
         r, c = 5, 5
         noise = np.random.normal(0, 1, (r * c, self.generator.z_dim))
         gen_imgs = self.generator.model.predict(noise)
@@ -120,6 +120,7 @@ class Gan():
         plt.close()
 
     def save(self, run_folder):
+        logger.debug("%s method is started", self.save.__name__)
         with open(os.path.join(run_folder, 'params.pkl'), 'wb') as f:
             pkl.dump([
                 self.discriminator.input_dim
@@ -146,14 +147,17 @@ class Gan():
         self.plot_model(run_folder)
 
     def save_model(self, run_folder):
+        logger.debug("%s method is started", self.save_model.__name__)
         self.model.save(os.path.join(run_folder, 'model.h5'))
         self.discriminator.model.save(os.path.join(run_folder, 'discriminator.h5'))
         self.generator.model.save(os.path.join(run_folder, 'generator.h5'))
 
     def plot_model(self, run_folder):
+        logger.debug("%s method is started", self.plot_model.__name__)
         plot_model(self.model, to_file=os.path.join(run_folder ,'viz/gan.png'), show_shapes = True, show_layer_names = True)
         plot_model(self.discriminator.model, to_file=os.path.join(run_folder ,'viz/discriminator.png'), show_shapes = True, show_layer_names = True)
         plot_model(self.generator.model, to_file=os.path.join(run_folder ,'viz/generator.png'), show_shapes = True, show_layer_names = True)
 
     def load_model(self, filepath):
+        logger.debug("%s method is started", self.load_model.__name__)
         self.model.load_weights(filepath)

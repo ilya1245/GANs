@@ -7,9 +7,10 @@ from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.initializers import RandomNormal
 
-import numpy as np
-import util.model_utils as gu
+import util.model_utils as mu
+from util import io_utils as io
 
+logger = io.get_camel_logger(__name__)
 
 class Discriminator():
     def __init__(
@@ -42,6 +43,7 @@ class Discriminator():
         self._compile()
 
     def _build(self):
+        logger.debug("%s method is started", self._build.__name__)
         input = Input(shape=self.input_dim)
         x = input
         for i in range(len(self.conv_filters)):
@@ -57,7 +59,7 @@ class Discriminator():
             if self.batch_norm_momentum and i > 0:
                 x = BatchNormalization(momentum=self.batch_norm_momentum)(x)
 
-            x = gu.get_activation_layer(self.activation)(x)
+            x = mu.get_activation_layer(self.activation)(x)
 
             if self.dropout_rate:
                 x = Dropout(rate=self.dropout_rate)(x)
@@ -70,7 +72,7 @@ class Discriminator():
 
     def _compile(self):
         self.model.compile(
-            optimizer=gu.get_opti(self.optimiser, self.learning_rate)
+            optimizer=mu.get_opti(self.optimiser, self.learning_rate)
             , loss='binary_crossentropy'
             , metrics=['accuracy']
         )
