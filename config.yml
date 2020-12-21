@@ -3,12 +3,14 @@ io:
   data_file: full_numpy_bitmap_camel.npy
   section: gan
   data_name: camel
-  run_id: '007'
+  run_id: '008'
   image_quantity: 80000
 
 exec:
   mode: build
-
+  batch_size: 100
+  epochs: 1000
+  print_batches: 50
 
 
 

@@ -38,7 +38,7 @@ cfg = yml['exec']
 io.cfg = yml['io']
 io.project_root = PROJECT_ROOT
 RUN_FOLDER = io.prepare_run_folders()
-io.load_camel_data()
+(x_train, y_train) = io.load_camel_data()
 
 generator = Generator(
     initial_dense_layer_size=(7, 7, 64)
@@ -79,11 +79,16 @@ gan = Gan(
 gan_model = gan.model
 gan_model.summary()
 
-
 print(cfg['mode'], 'mode')
 if cfg['mode'] == 'build':
-    print('build mode')
-    # gan.save(generator, discriminator, RUN_FOLDER)
+    gan.save(RUN_FOLDER)
 else:
-    print('load mode')
-    # gan.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))
+    gan.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))
+
+gan.train(
+    x_train
+    , batch_size=cfg['batch_size']
+    , epochs=cfg['epochs']
+    , run_folder=RUN_FOLDER
+    , print_every_n_batches=cfg['print_batches']
+)

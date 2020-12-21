@@ -64,7 +64,7 @@ class Generator():
         if self.dropout_rate:
             x = Dropout(rate=self.dropout_rate)(x)
 
-        x = self.append_conv_layers(x)
+        x = self._append_conv_layers(x)
 
         return Model(input, x)
 
@@ -75,7 +75,7 @@ class Generator():
             , metrics=['accuracy']
         )
 
-    def append_conv_layers(self, x):
+    def _append_conv_layers(self, x):
         for i in range(len(self.conv_filters)):
             if self.upsample[i] == 2:
                 x = UpSampling2D()(x)
