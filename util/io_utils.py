@@ -1,4 +1,4 @@
-import os
+import os, sys
 import numpy as np
 import logging
 import config
@@ -31,7 +31,20 @@ def load_camel_data():
     y = [0] * len(x)
     return x, y
 
-def init_camel_logging():
-    logging.basicConfig(filename=cfg_log['file_name'], level=cfg_log['level'], format='%(asctime)s %(name)s %(levelname)s:%(message)s')
+def get_camel_logger(module_name):
+    logger = logging.getLogger(module_name)
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s')
+
+    fh = logging.FileHandler(cfg_log['file_name'])
+    fh.setLevel(cfg_log['log_level'])
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setLevel(cfg_log['console_level'])
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
+    return logger
 
 

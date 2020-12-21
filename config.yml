@@ -15,7 +15,8 @@ camel:
 
   logger:
     file_name: camel.log
-    level: 10
+    log_level: 20
+    console_level: 10
 
 
 

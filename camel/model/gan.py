@@ -1,7 +1,7 @@
 from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, \
     BatchNormalization, LeakyReLU, Dropout, ZeroPadding2D, UpSampling2D
 from tensorflow.keras.models import Model, Sequential
-import os
+import os, sys
 import pickle as pkl
 from tensorflow.keras.utils import plot_model
 import numpy as np
@@ -13,8 +13,7 @@ from util import model_utils as mu
 from generator import Generator
 from discriminator import Discriminator
 
-io.init_camel_logging()
-logger = logging.getLogger(__name__)
+logger = io.get_camel_logger(__name__)
 
 class Gan():
     def __init__(

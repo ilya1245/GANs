@@ -12,9 +12,7 @@ from util import io_utils as io
 import numpy as np
 import util.model_utils as mu
 
-
-io.init_camel_logging()
-logger = logging.getLogger(__name__)
+logger = io.get_camel_logger(__name__)
 
 class Generator():
     def __init__(
