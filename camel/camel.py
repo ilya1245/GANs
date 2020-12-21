@@ -27,15 +27,13 @@ import numpy as np
 # import matplotlib.pyplot as plt
 import yaml
 from util import io_utils as io
+from util import config
 from model.generator import Generator
 from model.discriminator import Discriminator
 from model.gan import Gan
 
-with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
-    yml = yaml.load(ymlfile, Loader=yaml.FullLoader)
+cfg_exec = config.cfg_exec
 
-cfg = yml['exec']
-io.cfg = yml['io']
 io.project_root = PROJECT_ROOT
 RUN_FOLDER = io.prepare_run_folders()
 (x_train, y_train) = io.load_camel_data()
@@ -79,16 +77,16 @@ gan = Gan(
 gan_model = gan.model
 gan_model.summary()
 
-print(cfg['mode'], 'mode')
-if cfg['mode'] == 'build':
+print(cfg_exec['mode'], 'mode')
+if cfg_exec['mode'] == 'build':
     gan.save(RUN_FOLDER)
 else:
     gan.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))
 
 gan.train(
     x_train
-    , batch_size=cfg['batch_size']
-    , epochs=cfg['epochs']
+    , batch_size=cfg_exec['batch_size']
+    , epochs=cfg_exec['epochs']
     , run_folder=RUN_FOLDER
-    , print_every_n_batches=cfg['print_batches']
+    , print_every_n_batches=cfg_exec['print_batches']
 )

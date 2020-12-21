@@ -6,10 +6,15 @@ import pickle as pkl
 from tensorflow.keras.utils import plot_model
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
+from util import io_utils as io
 from util import model_utils as mu
 from generator import Generator
 from discriminator import Discriminator
+
+io.init_camel_logging()
+logger = logging.getLogger(__name__)
 
 class Gan():
     def __init__(
@@ -44,6 +49,7 @@ class Gan():
         mu.set_trainable(dis_model, True)
 
     def train_generator(self, batch_size):
+        logger.debug("%s method is started", 'train_generator')
         valid = np.ones((batch_size,1))
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         return self.model.train_on_batch(noise, valid)

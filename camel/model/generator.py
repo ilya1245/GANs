@@ -6,13 +6,15 @@ from tensorflow.keras import backend as K
 from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.initializers import RandomNormal
+import logging
 
+from util import io_utils as io
 import numpy as np
 import util.model_utils as mu
 
 
-# from util.gan_utils import get_activation_layer
-
+io.init_camel_logging()
+logger = logging.getLogger(__name__)
 
 class Generator():
     def __init__(
@@ -50,6 +52,7 @@ class Generator():
         self._compile()
 
     def _build(self):
+        logger.debug("%s method is started", '_build')
         input = Input(shape=self.z_dim)
 
         x = Dense(np.prod(self.initial_dense_layer_size), kernel_initializer=self.weight_init)(input)
