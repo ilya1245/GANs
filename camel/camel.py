@@ -29,15 +29,15 @@ import yaml
 from util import io_utils as io
 from model.generator import Generator
 from model.discriminator import Discriminator
-import model.adversarial as adversarial
+from model.gan import Gan
 
 with open(os.path.join(PROJECT_ROOT, "config.yml"), "r") as ymlfile:
-    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+    yml = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-exec = cfg['exec']
-io.cfg = cfg['io']
+cfg = yml['exec']
+io.cfg = yml['io']
 io.project_root = PROJECT_ROOT
-a = io.prepare_run_folders()
+RUN_FOLDER = io.prepare_run_folders()
 io.load_camel_data()
 
 generator = Generator(
@@ -71,5 +71,19 @@ discriminator = Discriminator(
 dis_model = discriminator.model
 dis_model.summary()
 
-adv_model = adversarial.build(generator, discriminator)
-adv_model.summary()
+gan = Gan(
+    generator=generator,
+    discriminator=discriminator
+)
+
+gan_model = gan.model
+gan_model.summary()
+
+
+print(cfg['mode'], 'mode')
+if cfg['mode'] == 'build':
+    print('build mode')
+    # gan.save(generator, discriminator, RUN_FOLDER)
+else:
+    print('load mode')
+    # gan.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))
