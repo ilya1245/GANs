@@ -1,12 +1,10 @@
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, \
-    BatchNormalization, LeakyReLU, Dropout, ZeroPadding2D, UpSampling2D
-from tensorflow.keras.models import Model, Sequential
-import os, sys
+from tensorflow.keras.layers import Input
+from tensorflow.keras.models import Model
+import os
 import pickle as pkl
 from tensorflow.keras.utils import plot_model
 import numpy as np
 import matplotlib.pyplot as plt
-import logging
 
 from util import io_utils as io
 from util import model_utils as mu
@@ -56,6 +54,7 @@ class Gan():
 
     def train_discriminator(self, x_train, batch_size, using_generator):
         logger.debug("%s method is started", self.train_discriminator.__name__)
+        # Create 2 arrays: size=batch_size, one filled by ones, one filled by zeros
         valid = np.ones((batch_size,1))
         fake = np.zeros((batch_size,1))
 
@@ -64,16 +63,19 @@ class Gan():
             if true_imgs.shape[0] != batch_size:
                 true_imgs = next(x_train)[0]
         else:
+            # Get random batch of true images
             idx = np.random.randint(0, x_train.shape[0], batch_size)
             true_imgs = x_train[idx]
 
+        # Generate batch of images using random (normal) input vectors
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
+        # noise = (np.random.randint(0, 2000, (batch_size, self.generator.z_dim)) - 1000)/500
         gen_imgs = self.generator.model.predict(noise)
 
         d_loss_real, d_acc_real =   self.discriminator.model.train_on_batch(true_imgs, valid)
         d_loss_fake, d_acc_fake =   self.discriminator.model.train_on_batch(gen_imgs, fake)
-        d_loss =  0.5 * (d_loss_real + d_loss_fake)
-        d_acc = 0.5 * (d_acc_real + d_acc_fake)
+        d_loss = (d_loss_real + d_loss_fake) / 2
+        d_acc = (d_acc_real + d_acc_fake) / 2
 
         return [d_loss, d_loss_real, d_loss_fake, d_acc, d_acc_real, d_acc_fake]
 
@@ -85,7 +87,7 @@ class Gan():
             g = self.train_generator(batch_size)
 
             print("%d [D loss: (%.3f)(R %.3f, F %.3f)] [D acc: (%.3f)(%.3f, %.3f)] [G loss: %.3f] [G acc: %.3f]" % (
-            epoch, d[0], d[1], d[2], d[3], d[4], d[5], g[0], g[1]))
+                epoch, d[0], d[1], d[2], d[3], d[4], d[5], g[0], g[1]))
 
             self.d_losses.append(d)
             self.g_losses.append(g)

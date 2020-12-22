@@ -1,10 +1,6 @@
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, \
-    BatchNormalization, LeakyReLU, Dropout, ZeroPadding2D, UpSampling2D
+from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, BatchNormalization, Dropout
 
-from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras import backend as K
-from tensorflow.keras.optimizers import Adam, RMSprop
-from tensorflow.keras.utils import plot_model
+from tensorflow.keras.models import Model
 from tensorflow.keras.initializers import RandomNormal
 
 import util.model_utils as mu
