@@ -37,7 +37,7 @@ class Gan():
         mu.set_trainable(dis_model, False)
         model_input = Input(shape=(self.generator.z_dim,), name='gan_input')
         model_output = dis_model(gen_model(model_input))
-        return  Model(model_input, model_output)
+        return Model(model_input, model_output)
 
     def _compile(self):
         dis_model = self.discriminator.model
@@ -47,32 +47,35 @@ class Gan():
         mu.set_trainable(dis_model, True)
 
     def train_generator(self, batch_size):
+        # Train the generator by training the whole GAN with fixed discriminator weights
         logger.debug("%s method is started", self.train_generator.__name__)
-        valid = np.ones((batch_size,1))
+        valid = np.ones((batch_size, 1))
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         return self.model.train_on_batch(noise, valid)
 
     def train_discriminator(self, x_train, batch_size, using_generator):
         logger.debug("%s method is started", self.train_discriminator.__name__)
-        # Create 2 arrays: size=batch_size, one filled by ones, one filled by zeros
-        valid = np.ones((batch_size,1))
-        fake = np.zeros((batch_size,1))
+
+        # Create 2 arrays: size=batch_size, one filled with ones, one filled with zeros
+        valid = np.ones((batch_size, 1))
+        fake = np.zeros((batch_size, 1))
 
         if using_generator:
             true_imgs = next(x_train)[0]
             if true_imgs.shape[0] != batch_size:
                 true_imgs = next(x_train)[0]
         else:
-            # Get random batch of true images
+            # Get a random batch of true images
             idx = np.random.randint(0, x_train.shape[0], batch_size)
             true_imgs = x_train[idx]
 
-        # Generate batch of images using random (normal) input vectors
+        # Generate a batch of images using random (normal) input vectors
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         # noise = (np.random.randint(0, 2000, (batch_size, self.generator.z_dim)) - 1000)/500
         gen_imgs = self.generator.model.predict(noise)
 
         d_loss_real, d_acc_real =   self.discriminator.model.train_on_batch(true_imgs, valid)
+        # d_metrics_names = self.discriminator.model.metrics_names
         d_loss_fake, d_acc_fake =   self.discriminator.model.train_on_batch(gen_imgs, fake)
         d_loss = (d_loss_real + d_loss_fake) / 2
         d_acc = (d_acc_real + d_acc_fake) / 2
@@ -83,6 +86,7 @@ class Gan():
         logger.debug("%s method is started", self.train.__name__)
         for epoch in range(self.epoch, self.epoch + epochs):
 
+            # for i in range(0, 10):
             d = self.train_discriminator(x_train, batch_size, using_generator)
             g = self.train_generator(batch_size)
 
@@ -103,20 +107,20 @@ class Gan():
 
     def sample_images(self, run_folder):
         logger.debug("%s method is started", self.sample_images.__name__)
-        r, c = 5, 5
-        noise = np.random.normal(0, 1, (r * c, self.generator.z_dim))
+        row, col = 3, 3
+        noise = np.random.normal(0, 1, (row * col, self.generator.z_dim))
         gen_imgs = self.generator.model.predict(noise)
 
         gen_imgs = 0.5 * (gen_imgs + 1)
         gen_imgs = np.clip(gen_imgs, 0, 1)
 
-        fig, axs = plt.subplots(r, c, figsize=(15,15))
+        fig, axs = plt.subplots(row, col, figsize=(15, 15))
         cnt = 0
 
-        for i in range(r):
-            for j in range(c):
-                axs[i,j].imshow(np.squeeze(gen_imgs[cnt, :,:,:]), cmap = 'gray')
-                axs[i,j].axis('off')
+        for i in range(row):
+            for j in range(col):
+                axs[i, j].imshow(np.squeeze(gen_imgs[cnt, :, :, :]), cmap='gray')
+                axs[i, j].axis('off')
                 cnt += 1
         fig.savefig(os.path.join(run_folder, "images/sample_%d.png" % self.epoch))
         plt.close()
@@ -156,9 +160,11 @@ class Gan():
 
     def plot_model(self, run_folder):
         logger.debug("%s method is started", self.plot_model.__name__)
-        plot_model(self.model, to_file=os.path.join(run_folder ,'viz/gan.png'), show_shapes = True, show_layer_names = True)
-        plot_model(self.discriminator.model, to_file=os.path.join(run_folder ,'viz/discriminator.png'), show_shapes = True, show_layer_names = True)
-        plot_model(self.generator.model, to_file=os.path.join(run_folder ,'viz/generator.png'), show_shapes = True, show_layer_names = True)
+        plot_model(self.model, to_file=os.path.join(run_folder, 'viz/gan.png'), show_shapes=True, show_layer_names=True)
+        plot_model(self.discriminator.model, to_file=os.path.join(run_folder, 'viz/discriminator.png'),
+                   show_shapes=True, show_layer_names=True)
+        plot_model(self.generator.model, to_file=os.path.join(run_folder, 'viz/generator.png'), show_shapes=True,
+                   show_layer_names=True)
 
     def load_model(self, filepath):
         logger.debug("%s method is started", self.load_model.__name__)

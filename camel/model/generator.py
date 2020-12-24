@@ -38,12 +38,11 @@ class Generator():
         self.optimiser = optimiser
         self.z_dim = z_dim
 
-        self.name = 'generatoran'
+        self.name = 'generator'
         self.weight_init = RandomNormal(mean=0., stddev=0.02)
         self.losses = []
 
         self.model = self._build()
-        self._compile()
 
     def _build(self):
         logger.debug("%s method is started", self._build.__name__)
@@ -64,13 +63,6 @@ class Generator():
         x = self._append_conv_layers(x)
 
         return Model(input, x)
-
-    def _compile(self):
-        self.model.compile(
-            optimizer=mu.get_opti(self.optimiser, self.learning_rate)
-            , loss='binary_crossentropy'
-            , metrics=['accuracy']
-        )
 
     def _append_conv_layers(self, x):
         for i in range(len(self.conv_filters)):
