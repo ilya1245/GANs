@@ -24,6 +24,7 @@ if not LIB_PATH in sys.path:
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, save_img, img_to_array
 import os, sys
 from wgangp.model.generator import Generator
+from wgangp.model.critic import Critic
 # from model.discriminator import Discriminator
 # from model.gan import Gan
 
@@ -38,7 +39,6 @@ logger.info("-------------------- New run of celeb WGANPG. Run folder: %s ------
 
 x_train = io.load_celeb_data()
 
-IMAGE_SIZE = config.cfg_celeb_io['image_size']
 generator = Generator(
     initial_dense_layer_size=(4, 4, 512)
     , upsample=[1, 1, 1, 1]
@@ -51,3 +51,21 @@ generator = Generator(
     , learning_rate=0.0002
     , z_dim=100
 )
+
+gen_model = generator.model
+gen_model.summary()
+
+image_size = config.cfg_celeb_io['image_size']
+critic = Critic(
+    input_dim = (image_size,image_size,3)
+    , conv_filters = [64,128,256,512]
+    , conv_kernel_size = [5,5,5,5]
+    , conv_strides = [2,2,2,2]
+    , batch_norm_momentum = None
+    , activation = 'leaky_relu'
+    , dropout_rate = None
+    , learning_rate = 0.0002
+)
+
+crt_model = critic.model
+crt_model.summary()

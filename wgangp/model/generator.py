@@ -93,3 +93,5 @@ class Generator():
 
             else:
                 x = Activation('tanh')(x)
+
+        return x
