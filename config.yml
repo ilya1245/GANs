@@ -1,7 +1,7 @@
 celeb:
   io:
     data_folder: 'c:\\GitML\\GANs\\data\\celeba'
-    image_size: 128
+    image_size: 64
     section: wgangp
     run_id: '001'
     data_name: celeb
@@ -14,7 +14,7 @@ celeb:
     print_batches: 50
 
   logger:
-    file_name: camel.log
+    file_name: celeb.log
     log_level: 10
     console_level: 10
 
