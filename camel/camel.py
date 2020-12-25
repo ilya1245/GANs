@@ -33,10 +33,10 @@ from model.discriminator import Discriminator
 from model.gan import Gan
 
 logger = io.get_camel_logger("cammel.py")
-cfg_exec = config.cfg_exec
+cfg_exec = config.cfg_camel_exec
 
 io.project_root = PROJECT_ROOT
-RUN_FOLDER = io.prepare_run_folders()
+RUN_FOLDER = io.prepare_camel_folders()
 logger.info("-------------------- New run of camel GAN. Run folder: %s --------------------", RUN_FOLDER)
 
 (x_train, y_train) = io.load_camel_data()

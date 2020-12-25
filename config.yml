@@ -1,21 +1,40 @@
-camel:
+celeb:
   io:
-    data_folder: 'data'
-    data_file: full_numpy_bitmap_camel.npy
-    section: gan
-    data_name: camel
-    run_id: '008'
+    data_folder: 'd:\\Python_datasets\\celeba\\img_align_celeba'
+    section: wgangp
+    run_id: '001'
+    data_name: celeb
     image_quantity: 80000
 
   exec:
     mode: build
-    batch_size: 100
+    batch_size: 10
     epochs: 1000
     print_batches: 50
 
   logger:
     file_name: camel.log
-    log_level: 20
+    log_level: 10
+    console_level: 10
+
+camel:
+  io:
+    data_folder: 'data'
+    data_file: full_numpy_bitmap_camel.npy
+    section: gan
+    run_id: '001'
+    data_name: camel
+    image_quantity: 80000
+
+  exec:
+    mode: build
+    batch_size: 10
+    epochs: 100
+    print_batches: 20
+
+  logger:
+    file_name: camel.log
+    log_level: 10
     console_level: 10
 
 
