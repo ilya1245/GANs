@@ -1,6 +1,7 @@
 celeb:
   io:
-    data_folder: 'd:\\Python_datasets\\celeba\\img_align_celeba'
+    data_folder: 'c:\\GitML\\GANs\\data\\celeba'
+    image_size: 128
     section: wgangp
     run_id: '001'
     data_name: celeb

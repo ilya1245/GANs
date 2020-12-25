@@ -5,17 +5,16 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, s
 
 import logging
 import config
-project_root = None
 
-# cfg_exec = config.cfg_camel_exec
-# cfg_io = config.cfg_camel_io
-# cfg_log = config.cfg_camel_log
+project_root = None
 
 def prepare_camel_folders():
     return prepare_folders(config.cfg_camel_io)
 
-def prepare_folders(cfg_io):
+def prepare_celeb_folders():
+    return prepare_folders(config.cfg_celeb_io)
 
+def prepare_folders(cfg_io):
     run_folder = project_root + 'run/{}/'.format(cfg_io['section'])
     run_folder += '_'.join([cfg_io['run_id'], cfg_io['data_name']])
 
@@ -25,6 +24,7 @@ def prepare_folders(cfg_io):
         os.mkdir(os.path.join(run_folder, 'images'))
         os.mkdir(os.path.join(run_folder, 'weights'))
     return run_folder
+
 
 def load_camel_data():
     data_path = os.path.join(project_root, config.cfg_camel_io['data_folder'], config.cfg_camel_io['data_file'])
@@ -37,24 +37,31 @@ def load_camel_data():
     y = [0] * len(x)
     return x, y
 
-def load_celeb(data_name, image_size, batch_size):
-    data_folder = os.path.join("d:\\Python_datasets\\celeba", data_name)
+
+def load_celeb_data():
+    data_folder = config.cfg_celeb_io['data_folder']
+    image_size = config.cfg_celeb_io['image_size']
 
     data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32') - 127.5) / 127.5)
+    # data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32')) / 256)
 
     x_train = data_gen.flow_from_directory(data_folder
-                                           , target_size = (image_size,image_size)
-                                           , batch_size = batch_size
-                                           , shuffle = True
-                                           , class_mode = 'input'
-                                           , subset = "training"
+                                           , target_size=(image_size, image_size)
+                                           , batch_size=config.cfg_celeb_exec['batch_size']
+                                           # , shuffle=True
+                                           , class_mode='input'
+                                           , subset="training"
                                            )
-    plt.imshow(x_train[111])
-    plt.show()
+    # plt.imshow(x_train[0][0][0])
+    # plt.show()
     return x_train
+
 
 def get_camel_logger(module_name):
     return get_logger(module_name, config.cfg_camel_log)
+
+def get_celeb_logger(module_name):
+    return get_logger(module_name, config.cfg_celeb_log)
 
 def get_logger(module_name, cfg_log):
     logger = logging.getLogger(module_name)
@@ -71,5 +78,3 @@ def get_logger(module_name, cfg_log):
     sh.setFormatter(formatter)
     logger.addHandler(sh)
     return logger
-
-
