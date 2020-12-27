@@ -1,5 +1,6 @@
 try:
     from google.colab import drive
+
     drive.mount('/content/drive', force_remount=True)
     COLAB = True
     print("Note: using Google CoLab")
@@ -25,6 +26,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, s
 import os, sys
 from wgangp.model.generator import Generator
 from wgangp.model.critic import Critic
+from wgangp.model.wgangp import WGANGP
 # from model.discriminator import Discriminator
 # from model.gan import Gan
 
@@ -32,6 +34,7 @@ from util import io_utils as io
 from util import config
 
 logger = io.get_celeb_logger("celeb.py")
+cfg_exec = config.cfg_celeb_exec
 
 io.project_root = PROJECT_ROOT
 RUN_FOLDER = io.prepare_celeb_folders()
@@ -57,15 +60,26 @@ gen_model.summary()
 
 image_size = config.cfg_celeb_io['image_size']
 critic = Critic(
-    input_dim = (image_size,image_size,3)
-    , conv_filters = [64,128,256,512]
-    , conv_kernel_size = [5,5,5,5]
-    , conv_strides = [2,2,2,2]
-    , batch_norm_momentum = None
-    , activation = 'leaky_relu'
-    , dropout_rate = None
-    , learning_rate = 0.0002
+    input_dim=(image_size, image_size, 3)
+    , conv_filters=[64, 128, 256, 512]
+    , conv_kernel_size=[5, 5, 5, 5]
+    , conv_strides=[2, 2, 2, 2]
+    , batch_norm_momentum=None
+    , activation='leaky_relu'
+    , dropout_rate=None
+    , learning_rate=0.0002
 )
 
-crt_model = critic.model
-crt_model.summary()
+critic_model = critic.model
+critic_model.summary()
+
+wgangp = WGANGP(
+    generator=generator,
+    critic=critic,
+    optimiser='adam'
+    , grad_weight=10
+    , batch_size=cfg_exec['batch_size']
+)
+
+wgangp_model = wgangp.model
+wgangp_model.summary()

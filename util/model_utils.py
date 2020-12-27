@@ -12,6 +12,32 @@ class RandomWeightedAverage(Layer):
         alpha = K.random_uniform((self.batch_size, 1, 1, 1))
         return (alpha * inputs[0]) + ((1 - alpha) * inputs[1])
 
+def grad(y, x):
+    V = Lambda(lambda z: K.gradients(
+        z[0], z[1]), output_shape=[1])([y, x])
+    return V
+
+def gradient_penalty_loss(self, y_true, y_pred, interpolated_samples):
+    """
+    Computes gradient penalty based on prediction and weighted real / fake samples
+    """
+    gradients = grad(y_pred, interpolated_samples)[0]
+
+    # compute the euclidean norm by squaring ...
+    gradients_sqr = K.square(gradients)
+    #   ... summing over the rows ...
+    gradients_sqr_sum = K.sum(gradients_sqr,
+                              axis=np.arange(1, len(gradients_sqr.shape)))
+    #   ... and sqrt
+    gradient_l2_norm = K.sqrt(gradients_sqr_sum)
+    # compute lambda * (1 - ||grad||)^2 still for each single sample
+    gradient_penalty = K.square(1 - gradient_l2_norm)
+    # return the mean as loss over all the batch samples
+    return K.mean(gradient_penalty)
+
+def wasserstein(self, y_true, y_pred):
+    return -K.mean(y_true * y_pred)
+
 def get_activation_layer(activation):
     if activation == 'leaky_relu':
         layer = LeakyReLU(alpha = 0.2)
