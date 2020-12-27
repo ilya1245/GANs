@@ -137,6 +137,7 @@ class Gan():
                 , self.discriminator.activation
                 , self.discriminator.dropout_rate
                 , self.discriminator.learning_rate
+                , self.discriminator.optimiser
                 , self.generator.initial_dense_layer_size
                 , self.generator.upsample
                 , self.generator.conv_filters
