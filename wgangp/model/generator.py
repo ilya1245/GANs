@@ -42,8 +42,8 @@ class Generator():
 
         self.model = self._build()
 
+    @io.log_method_call(logger)
     def _build(self):
-        logger.debug("%s method is started", self._build.__name__)
         input = Input(shape=(self.z_dim,), name='input')
 
         x = Dense(np.prod(self.initial_dense_layer_size), kernel_initializer = self.weight_init)(input)

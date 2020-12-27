@@ -8,11 +8,14 @@ import config
 
 project_root = None
 
+
 def prepare_camel_folders():
     return prepare_folders(config.cfg_camel_io)
 
+
 def prepare_celeb_folders():
     return prepare_folders(config.cfg_celeb_io)
+
 
 def prepare_folders(cfg_io):
     run_folder = project_root + 'run/{}/'.format(cfg_io['section'])
@@ -57,11 +60,23 @@ def load_celeb_data():
     return x_train
 
 
+def log_method_call(logger):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            logger.debug("%s method is started", func.__name__)
+            return result
+        return wrapper
+    return decorator
+
+
 def get_camel_logger(module_name):
     return get_logger(module_name, config.cfg_camel_log)
 
+
 def get_celeb_logger(module_name):
     return get_logger(module_name, config.cfg_celeb_log)
+
 
 def get_logger(module_name, cfg_log):
     logger = logging.getLogger(module_name)

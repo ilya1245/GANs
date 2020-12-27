@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 from util import io_utils as io
 from util import model_utils as mu
-from generator import Generator
-from discriminator import Discriminator
+from ganimal.model.generator import Generator
+from ganimal.model.discriminator import Discriminator
 
 logger = io.get_camel_logger(__name__)
 
@@ -30,8 +30,8 @@ class Gan():
         self.model = self._build()
         self._compile()
 
+    @io.log_method_call(logger)
     def _build(self):
-        logger.debug("%s method is started", self._build.__name__)
         gen_model = self.generator.model
         dis_model = self.discriminator.model
         mu.set_trainable(dis_model, False)
@@ -46,15 +46,15 @@ class Gan():
                            , experimental_run_tf_function=False)
         mu.set_trainable(dis_model, True)
 
+    @io.log_method_call(logger)
     def train_generator(self, batch_size):
         # Train the generator by training the whole GAN with fixed discriminator weights
-        logger.debug("%s method is started", self.train_generator.__name__)
         valid = np.ones((batch_size, 1))
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         return self.model.train_on_batch(noise, valid)
 
+    @io.log_method_call(logger)
     def train_discriminator(self, x_train, batch_size, using_generator):
-        logger.debug("%s method is started", self.train_discriminator.__name__)
 
         # Create 2 arrays: size=batch_size, one filled with ones, one filled with zeros
         valid = np.ones((batch_size, 1))
@@ -82,8 +82,8 @@ class Gan():
 
         return [d_loss, d_loss_real, d_loss_fake, d_acc, d_acc_real, d_acc_fake]
 
+    @io.log_method_call(logger)
     def train(self, x_train, batch_size, epochs, run_folder, print_every_n_batches=50, using_generator=False):
-        logger.debug("%s method is started", self.train.__name__)
         for epoch in range(self.epoch, self.epoch + epochs):
 
             # for i in range(0, 10):
@@ -105,8 +105,8 @@ class Gan():
 
             self.epoch += 1
 
+    @io.log_method_call(logger)
     def sample_images(self, run_folder):
-        logger.debug("%s method is started", self.sample_images.__name__)
         row, col = 3, 3
         noise = np.random.normal(0, 1, (row * col, self.generator.z_dim))
         gen_imgs = self.generator.model.predict(noise)
@@ -125,8 +125,8 @@ class Gan():
         fig.savefig(os.path.join(run_folder, "images/sample_%d.png" % self.epoch))
         plt.close()
 
+    @io.log_method_call(logger)
     def save(self, run_folder):
-        logger.debug("%s method is started", self.save.__name__)
         with open(os.path.join(run_folder, 'params.pkl'), 'wb') as f:
             pkl.dump([
                 self.discriminator.input_dim
@@ -152,20 +152,20 @@ class Gan():
 
         self.plot_model(run_folder)
 
+    @io.log_method_call(logger)
     def save_model(self, run_folder):
-        logger.debug("%s method is started", self.save_model.__name__)
         self.model.save(os.path.join(run_folder, 'model.h5'))
         self.discriminator.model.save(os.path.join(run_folder, 'discriminator.h5'))
         self.generator.model.save(os.path.join(run_folder, 'generator.h5'))
 
+    @io.log_method_call(logger)
     def plot_model(self, run_folder):
-        logger.debug("%s method is started", self.plot_model.__name__)
         plot_model(self.model, to_file=os.path.join(run_folder, 'viz/gan.png'), show_shapes=True, show_layer_names=True)
         plot_model(self.discriminator.model, to_file=os.path.join(run_folder, 'viz/discriminator.png'),
                    show_shapes=True, show_layer_names=True)
         plot_model(self.generator.model, to_file=os.path.join(run_folder, 'viz/generator.png'), show_shapes=True,
                    show_layer_names=True)
 
+    @io.log_method_call(logger)
     def load_model(self, filepath):
-        logger.debug("%s method is started", self.load_model.__name__)
         self.model.load_weights(filepath)

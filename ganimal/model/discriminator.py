@@ -38,8 +38,8 @@ class Discriminator():
         self.model = self._build()
         self._compile()
 
+    @io.log_method_call(logger)
     def _build(self):
-        logger.debug("%s method is started", self._build.__name__)
         input = Input(shape=self.input_dim)
         x = input
         for i in range(len(self.conv_filters)):
@@ -66,6 +66,7 @@ class Discriminator():
 
         return Model(input, x)
 
+    @io.log_method_call(logger)
     def _compile(self):
         self.model.compile(
             optimizer=mu.get_opti(self.optimiser, self.learning_rate)
