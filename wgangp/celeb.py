@@ -81,5 +81,13 @@ wgangp = WGANGP(
     , batch_size=cfg_exec['batch_size']
 )
 
-wgangp_model = wgangp.model
-wgangp_model.summary()
+wgangp_critic_model = wgangp.critic_model
+wgangp_critic_model.summary()
+wgangp_generator_model = wgangp.generator_model
+wgangp_generator_model.summary()
+
+print(cfg_exec['mode'], 'mode')
+if cfg_exec['mode'] == 'build':
+    wgangp.save(RUN_FOLDER)
+else:
+    wgangp.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))

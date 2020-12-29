@@ -63,8 +63,8 @@ def load_celeb_data():
 def log_method_call(logger):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            result = func(*args, **kwargs)
             logger.debug("%s method is started", func.__name__)
+            result = func(*args, **kwargs)
             return result
         return wrapper
     return decorator
