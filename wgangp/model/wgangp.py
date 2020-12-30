@@ -4,6 +4,9 @@ import os
 import pickle
 from tensorflow.keras.utils import plot_model
 import tensorflow.keras.backend as K
+import tensorflow as tf
+tf.compat.v1.disable_eager_execution()
+
 import numpy as np
 import matplotlib.pyplot as plt
 from functools import partial
@@ -160,7 +163,7 @@ class WGANGP():
     @io.log_method_call(logger)
     def sample_images(self, run_folder):
         r, c = 5, 5
-        noise = np.random.normal(0, 1, (r * c, self.z_dim))
+        noise = np.random.normal(0, 1, (r * c, self.generator.z_dim))
         gen_imgs = self.generator.model.predict(noise)
 
         # Rescale images 0 - 1

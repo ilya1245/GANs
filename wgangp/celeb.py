@@ -37,8 +37,9 @@ logger = io.get_celeb_logger("celeb.py")
 cfg_exec = config.cfg_celeb_exec
 
 io.project_root = PROJECT_ROOT
-RUN_FOLDER = io.prepare_celeb_folders()
-logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", RUN_FOLDER)
+run_folder = io.prepare_celeb_folders()
+logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", run_folder)
+batch_size = cfg_exec['batch_size']
 
 x_train = io.load_celeb_data()
 
@@ -78,7 +79,7 @@ wgangp = WGANGP(
     critic=critic,
     optimiser='adam'
     , grad_weight=10
-    , batch_size=cfg_exec['batch_size']
+    , batch_size=batch_size
 )
 
 wgangp_critic_model = wgangp.critic_model
@@ -88,6 +89,16 @@ wgangp_generator_model.summary()
 
 print(cfg_exec['mode'], 'mode')
 if cfg_exec['mode'] == 'build':
-    wgangp.save(RUN_FOLDER)
+    wgangp.save(run_folder)
 else:
-    wgangp.load_weights(os.path.join(RUN_FOLDER, 'weights/weights.h5'))
+    wgangp.load_weights(os.path.join(run_folder, 'weights/weights.h5'))
+
+wgangp.train(
+    x_train
+    , batch_size = batch_size
+    , epochs = cfg_exec['epochs']
+    , run_folder = run_folder
+    , print_every_n_batches = cfg_exec['print_batches']
+    , n_critic = 5
+    , using_generator = True
+)

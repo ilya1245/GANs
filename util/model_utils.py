@@ -2,6 +2,7 @@ from tensorflow.keras.layers import Layer, Input, Conv2D, Flatten, Dense, Conv2D
 from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.models import Model, Sequential
 import tensorflow.keras.backend as K
+import numpy as np
 
 class RandomWeightedAverage(Layer):
     def __init__(self, batch_size):
@@ -17,7 +18,7 @@ def grad(y, x):
         z[0], z[1]), output_shape=[1])([y, x])
     return V
 
-def gradient_penalty_loss(self, y_true, y_pred, interpolated_samples):
+def gradient_penalty_loss(y_true, y_pred, interpolated_samples):
     """
     Computes gradient penalty based on prediction and weighted real / fake samples
     """
@@ -35,7 +36,7 @@ def gradient_penalty_loss(self, y_true, y_pred, interpolated_samples):
     # return the mean as loss over all the batch samples
     return K.mean(gradient_penalty)
 
-def wasserstein(self, y_true, y_pred):
+def wasserstein(y_true, y_pred):
     return -K.mean(y_true * y_pred)
 
 def get_activation_layer(activation):
