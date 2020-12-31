@@ -2,6 +2,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, save_img, img_to_array
+import zipfile
 
 import logging
 import config
@@ -57,6 +58,26 @@ def load_celeb_data():
                                            )
     # plt.imshow(x_train[0][0][0])
     # plt.show()
+    return x_train
+
+def load_celeb_data_zip():
+    zip_file = config.cfg_celeb_io['zip_file']
+    unzip_folder = 'd:/tmp/celeb'
+    zip_inner_data_folder = config.cfg_celeb_io['zip_inner_data_folder']
+    image_size = config.cfg_celeb_io['image_size']
+
+    with zipfile.ZipFile(zip_file,"r") as zip_ref:
+        zip_ref.extractall(unzip_folder)
+
+    data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32') - 127.5) / 127.5)
+
+    x_train = data_gen.flow_from_directory(os.path.join(unzip_folder, zip_inner_data_folder)
+                                           , target_size=(image_size, image_size)
+                                           , batch_size=config.cfg_celeb_exec['batch_size']
+                                           # , shuffle=True
+                                           , class_mode='input'
+                                           , subset="training"
+                                           )
     return x_train
 
 
