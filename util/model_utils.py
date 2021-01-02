@@ -4,6 +4,12 @@ from tensorflow.keras.models import Model, Sequential
 import tensorflow.keras.backend as K
 import numpy as np
 
+class Sampling(Layer):
+    def call(self, inputs):
+        mu, log_var = inputs
+        epsilon = K.random_normal(shape=K.shape(mu), mean=0., stddev=1.)
+        return mu + K.exp(log_var / 2) * epsilon
+
 class RandomWeightedAverage(Layer):
     def __init__(self, batch_size):
         super().__init__()

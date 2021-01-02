@@ -1,3 +1,23 @@
+vae:
+  io:
+    data_folder: 'c:\\GitML\\GANs\\data\\celeba'
+    zip_file: 'd:/Python_datasets/celeba_10000.zip'
+    zip_inner_data_folder: './'
+    image_size: 64
+    section: vae
+    run_id: '0032'
+    data_name: celeb
+  exec:
+    mode: build
+    batch_size: 64
+    epochs: 6000
+    print_batches: 10
+
+  logger:
+    file_name: vae.log
+    log_level: 10
+    console_level: 10
+
 wgangp:
   io:
     data_folder: 'c:\\GitML\\GANs\\data\\celeba'
@@ -7,7 +27,6 @@ wgangp:
     section: wgangp
     run_id: '001'
     data_name: celeb
-    image_quantity: 80000
 
   exec:
     mode: build
@@ -16,7 +35,7 @@ wgangp:
     print_batches: 50
 
   logger:
-    file_name: celeb.log
+    file_name: wgangp.log
     log_level: 10
     console_level: 10
 

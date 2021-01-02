@@ -1,5 +1,9 @@
 # Generated files
 run/
+data/
+
+# Python
+__init__.py
 
 # Idea
 .idea/
