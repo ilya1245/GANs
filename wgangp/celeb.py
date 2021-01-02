@@ -34,10 +34,10 @@ from util import io_utils as io
 from util import config
 
 logger = io.get_celeb_logger("celeb.py")
-cfg_exec = config.cfg_celeb_exec
+cfg_exec = config.cfg_wgangp_exec
 
 io.project_root = PROJECT_ROOT
-run_folder = io.prepare_celeb_folders()
+run_folder = io.prepare_wgangp_folders()
 logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", run_folder)
 batch_size = cfg_exec['batch_size']
 
@@ -59,7 +59,7 @@ generator = Generator(
 gen_model = generator.model
 gen_model.summary()
 
-image_size = config.cfg_celeb_io['image_size']
+image_size = config.cfg_wgangp_io['image_size']
 critic = Critic(
     input_dim=(image_size, image_size, 3)
     , conv_filters=[64, 128, 256, 512]

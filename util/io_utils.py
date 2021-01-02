@@ -14,8 +14,8 @@ def prepare_camel_folders():
     return prepare_folders(config.cfg_camel_io)
 
 
-def prepare_celeb_folders():
-    return prepare_folders(config.cfg_celeb_io)
+def prepare_wgangp_folders():
+    return prepare_folders(config.cfg_wgangp_io)
 
 
 def prepare_folders(cfg_io):
@@ -43,15 +43,15 @@ def load_camel_data():
 
 
 def load_celeb_data():
-    data_folder = config.cfg_celeb_io['data_folder']
-    image_size = config.cfg_celeb_io['image_size']
+    data_folder = config.cfg_wgangp_io['data_folder']
+    image_size = config.cfg_wgangp_io['image_size']
 
     data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32') - 127.5) / 127.5)
     # data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32')) / 256)
 
     x_train = data_gen.flow_from_directory(data_folder
                                            , target_size=(image_size, image_size)
-                                           , batch_size=config.cfg_celeb_exec['batch_size']
+                                           , batch_size=config.cfg_wgangp_exec['batch_size']
                                            # , shuffle=True
                                            , class_mode='input'
                                            , subset="training"
@@ -61,10 +61,10 @@ def load_celeb_data():
     return x_train
 
 def load_celeb_data_zip():
-    zip_file = config.cfg_celeb_io['zip_file']
+    zip_file = config.cfg_wgangp_io['zip_file']
     unzip_folder = 'd:/tmp/celeb'
-    zip_inner_data_folder = config.cfg_celeb_io['zip_inner_data_folder']
-    image_size = config.cfg_celeb_io['image_size']
+    zip_inner_data_folder = config.cfg_wgangp_io['zip_inner_data_folder']
+    image_size = config.cfg_wgangp_io['image_size']
 
     with zipfile.ZipFile(zip_file,"r") as zip_ref:
         zip_ref.extractall(unzip_folder)
@@ -73,7 +73,7 @@ def load_celeb_data_zip():
 
     x_train = data_gen.flow_from_directory(os.path.join(unzip_folder, zip_inner_data_folder)
                                            , target_size=(image_size, image_size)
-                                           , batch_size=config.cfg_celeb_exec['batch_size']
+                                           , batch_size=config.cfg_wgangp_exec['batch_size']
                                            # , shuffle=True
                                            , class_mode='input'
                                            , subset="training"
@@ -96,7 +96,7 @@ def get_camel_logger(module_name):
 
 
 def get_celeb_logger(module_name):
-    return get_logger(module_name, config.cfg_celeb_log)
+    return get_logger(module_name, config.cfg_wgangp_log)
 
 
 def get_logger(module_name, cfg_log):

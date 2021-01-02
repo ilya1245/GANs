@@ -1,4 +1,4 @@
-celeb:
+wgangp:
   io:
     data_folder: 'c:\\GitML\\GANs\\data\\celeba'
     zip_file: 'd:/Python_datasets/celeba_10000.zip'
