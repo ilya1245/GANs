@@ -15,9 +15,9 @@ import pickle
 from util import model_utils as mu
 from vae.model.callback import CustomCallback, step_decay_schedule
 
-class VAEModel(Model):
+class VaeModel(Model):
     def __init__(self, encoder, decoder, r_loss_factor, **kwargs):
-        super(VAEModel, self).__init__(**kwargs)
+        super(VaeModel, self).__init__(**kwargs)
         self.encoder = encoder
         self.decoder = decoder
         self.r_loss_factor = r_loss_factor

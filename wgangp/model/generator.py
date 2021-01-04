@@ -8,7 +8,7 @@ from util import io_utils as io
 import numpy as np
 import util.model_utils as mu
 
-logger = io.get_celeb_logger(__name__)
+logger = io.get_wgangp_logger(__name__)
 
 
 class Generator():

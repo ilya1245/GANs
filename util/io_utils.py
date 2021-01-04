@@ -17,6 +17,9 @@ def prepare_camel_folders():
 def prepare_wgangp_folders():
     return prepare_folders(config.cfg_wgangp_io)
 
+def prepare_vae_folders():
+    return prepare_folders(config.cfg_vae_io)
+
 
 def prepare_folders(cfg_io):
     run_folder = project_root + 'run/{}/'.format(cfg_io['section'])
@@ -95,8 +98,11 @@ def get_camel_logger(module_name):
     return get_logger(module_name, config.cfg_camel_log)
 
 
-def get_celeb_logger(module_name):
+def get_wgangp_logger(module_name):
     return get_logger(module_name, config.cfg_wgangp_log)
+
+def get_vae_logger(module_name):
+    return get_logger(module_name, config.cfg_vae_log)
 
 
 def get_logger(module_name, cfg_log):

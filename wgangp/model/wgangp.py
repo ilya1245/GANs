@@ -16,7 +16,7 @@ from util import model_utils as mu
 from wgangp.model.generator import Generator
 from wgangp.model.critic import Critic
 
-logger = io.get_celeb_logger(__name__)
+logger = io.get_wgangp_logger(__name__)
 
 
 class WGANGP():

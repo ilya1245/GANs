@@ -18,7 +18,6 @@ class Encoder():
             , conv_kernel_size
             , conv_strides
             , z_dim
-            , r_loss_factor
             , use_batch_norm=False
             , use_dropout=False
     ):

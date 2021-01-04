@@ -22,8 +22,8 @@ cfg_wgangp_exec = _cfg_wgangp['exec']
 cfg_wgangp_log = _cfg_wgangp['logger']
 cfg_wgangp_io = _cfg_wgangp['io']
 
-cfg_vae_exec = _cfg_wgangp['exec']
-cfg_vae_log = _cfg_wgangp['logger']
-cfg_vae_io = _cfg_wgangp['io']
+cfg_vae_exec = _cfg_vae['exec']
+cfg_vae_log = _cfg_vae['logger']
+cfg_vae_io = _cfg_vae['io']
 
 

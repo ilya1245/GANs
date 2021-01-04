@@ -33,7 +33,7 @@ from wgangp.model.wgangp import WGANGP
 from util import io_utils as io
 from util import config
 
-logger = io.get_celeb_logger("celeb.py")
+logger = io.get_wgangp_logger("celeb.py")
 cfg_exec = config.cfg_wgangp_exec
 
 io.project_root = PROJECT_ROOT
