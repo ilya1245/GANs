@@ -1,19 +1,9 @@
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, BatchNormalization, LeakyReLU, Dropout, Layer
 from tensorflow.keras.models import Model
-from tensorflow.keras import backend as K
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.utils import plot_model
-
 import tensorflow as tf
 
-import numpy as np
-import json
-import os
-import pickle
+from util import io_utils as io
 
-from util import model_utils as mu
-from vae.model.callback import CustomCallback, step_decay_schedule
+logger = io.get_vae_logger(__name__)
 
 class VaeModel(Model):
     def __init__(self, encoder, decoder, r_loss_factor, **kwargs):
@@ -22,6 +12,7 @@ class VaeModel(Model):
         self.decoder = decoder
         self.r_loss_factor = r_loss_factor
 
+    @io.log_method_call(logger)
     def train_step(self, data):
         if isinstance(data, tuple):
             data = data[0]
@@ -44,6 +35,7 @@ class VaeModel(Model):
             "kl_loss": kl_loss,
         }
 
+    @io.log_method_call(logger)
     def call(self, inputs):
         latent = self.encoder(inputs)
         return self.decoder(latent)

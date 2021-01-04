@@ -22,10 +22,9 @@ if not LIB_PATH in sys.path:
     sys.path.append(LIB_PATH)
     print(LIB_PATH + ' has been added to sys.path')
 
-import os, sys
 from vae.model.encoder import Encoder
 from vae.model.decoder import Decoder
-from vae.model.vae_model import VaeModel
+from vae.model.vae import VAE
 
 from util import io_utils as io
 from util import config
@@ -59,6 +58,8 @@ decoder = Decoder(z_dim=200,
                   use_batch_norm=True,
                   use_dropout=True)
 
-vae_model = VaeModel(encoder=encoder,
-                     decoder=decoder,
-                     r_loss_factor=10000)
+vae = VAE(encoder=encoder,
+          decoder=decoder,
+          r_loss_factor=10000)
+
+vae.compile(learning_rate=0.0005)

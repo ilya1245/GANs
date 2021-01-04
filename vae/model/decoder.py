@@ -1,15 +1,13 @@
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Reshape, Lambda, Activation, \
-    BatchNormalization, LeakyReLU, Dropout, Layer
+from tensorflow.keras.layers import Input, Dense, Conv2DTranspose, Reshape, Activation, \
+    BatchNormalization, LeakyReLU, Dropout
 
 from tensorflow.keras.models import Model
-from tensorflow.keras import backend as K
-from tensorflow.keras.initializers import RandomNormal
+
 import numpy as np
 
-import util.model_utils as mu
 from util import io_utils as io
 
-logger = io.get_camel_logger(__name__)
+logger = io.get_vae_logger(__name__)
 
 
 class Decoder():
@@ -31,7 +29,7 @@ class Decoder():
         self.use_dropout = use_dropout
         self.shape_before_flattening = shape_before_flattening
 
-        self.model = self._build()
+        self._build()
 
     @io.log_method_call(logger)
     def _build(self):
