@@ -41,7 +41,7 @@ run_folder = io.prepare_wgangp_folders()
 logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", run_folder)
 batch_size = cfg_exec['batch_size']
 
-x_train = io.load_celeb_data_zip()
+x_train = io.load_celeb_data()
 
 generator = Generator(
     initial_dense_layer_size=(4, 4, 512)

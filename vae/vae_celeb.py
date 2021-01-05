@@ -40,7 +40,7 @@ input_dim = (128, 128, 3)
 
 batch_size = cfg_exec['batch_size']
 
-x_train = io.load_celeb_data_zip()
+x_train = io.load_celeb_data()
 
 encoder = Encoder(input_dim,
                   conv_filters=[32, 64, 64, 64],
@@ -63,3 +63,17 @@ vae = VAE(encoder=encoder,
           r_loss_factor=10000)
 
 vae.compile(learning_rate=0.0005)
+
+LEARNING_RATE = 0.0005
+EPOCHS = 20
+PRINT_EVERY_N_BATCHES = 10
+
+INITIAL_EPOCH = 0
+
+vae.train_with_generator(
+    x_train
+    , epochs=EPOCHS
+    , steps_per_epoch=int(x_train.samples / batch_size)
+    , run_folder=run_folder
+    , print_every_n_batches=PRINT_EVERY_N_BATCHES
+)
