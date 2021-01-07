@@ -5,6 +5,7 @@ from util import io_utils as io
 
 logger = io.get_vae_logger(__name__)
 
+
 class VaeModel(Model):
     def __init__(self, encoder, decoder, r_loss_factor, **kwargs):
         super(VaeModel, self).__init__(**kwargs)
@@ -35,7 +36,6 @@ class VaeModel(Model):
             "kl_loss": kl_loss,
         }
 
-    @io.log_method_call(logger)
     def call(self, inputs):
         latent = self.encoder(inputs)
         return self.decoder(latent)

@@ -46,38 +46,39 @@ def load_camel_data():
     return x, y
 
 
-def load_celeb_data():
-    data_folder = config.cfg_wgangp_io['data_folder']
-    image_size = config.cfg_wgangp_io['image_size']
+def load_celeb_data(cfg, idg: ImageDataGenerator):
+    data_folder = cfg['io']['data_folder']
 
     if os.path.exists(data_folder):
-        x_train = load_images(data_folder, image_size)
+        x_train = load_images(cfg, idg)
         if x_train.num_classes > 0:
             return x_train
 
-    return load_celeb_data_zip(data_folder)
+    return load_celeb_data_zip(cfg, idg)
 
 
-def load_celeb_data_zip(unzip_folder):
-    zip_file = config.cfg_wgangp_io['zip_file']
-    image_size = config.cfg_wgangp_io['image_size']
+def load_celeb_data_zip(cfg, idg: ImageDataGenerator):
+    unzip_folder = cfg['io']['data_folder']
+    zip_file = cfg['io']['zip_file']
+    image_size = cfg['io']['image_size']
 
     with zipfile.ZipFile(zip_file, "r") as zip_ref:
         zip_ref.extractall(unzip_folder)
 
-    return load_images(unzip_folder, image_size)
+    return load_images(cfg, idg)
 
 
-def load_images(data_folder, image_size):
-    data_gen = ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32') - 127.5) / 127.5)
+def load_images(cfg, idg: ImageDataGenerator):
+    data_folder = cfg['io']['data_folder']
+    image_size = cfg['io']['image_size']
 
-    x_train = data_gen.flow_from_directory(data_folder
-                                           , target_size=(image_size, image_size)
-                                           , batch_size=config.cfg_wgangp_exec['batch_size']
-                                           # , shuffle=True
-                                           , class_mode='input'
-                                           , subset="training"
-                                           )
+    x_train = idg.flow_from_directory(data_folder
+                                      , target_size=(image_size, image_size)
+                                      , batch_size=cfg['exec']['batch_size']
+                                      # , shuffle=True
+                                      , class_mode='input'
+                                      , subset="training"
+                                      )
     # plt.imshow(x_train[0][0][0])
     # plt.show()
     return x_train
@@ -89,7 +90,9 @@ def log_method_call(logger):
             logger.debug("%s method is started", func.__name__)
             result = func(*args, **kwargs)
             return result
+
         return wrapper
+
     return decorator
 
 

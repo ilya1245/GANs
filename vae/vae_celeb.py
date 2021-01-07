@@ -22,6 +22,8 @@ if not LIB_PATH in sys.path:
     sys.path.append(LIB_PATH)
     print(LIB_PATH + ' has been added to sys.path')
 
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
 from vae.model.encoder import Encoder
 from vae.model.decoder import Decoder
 from vae.model.vae import VAE
@@ -31,16 +33,20 @@ from util import config
 
 logger = io.get_vae_logger("vae_celeb.py")
 cfg_exec = config.cfg_vae_exec
+cfg_io = config.cfg_vae_io
 
 io.project_root = PROJECT_ROOT
 run_folder = io.prepare_vae_folders()
 logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", run_folder)
 
-input_dim = (128, 128, 3)
-
 batch_size = cfg_exec['batch_size']
+print_batches = cfg_exec['print_batches']
+image_size = cfg_io['image_size']
+epochs = cfg_exec['epochs']
+input_dim = (image_size, image_size, 3)
 
-x_train = io.load_celeb_data()
+cfg = config.cfg_vae
+x_train = io.load_celeb_data(cfg, ImageDataGenerator(rescale=1. / 255, validation_split=0.8))
 
 encoder = Encoder(input_dim,
                   conv_filters=[32, 64, 64, 64],
@@ -51,7 +57,7 @@ encoder = Encoder(input_dim,
                   use_dropout=True)
 
 decoder = Decoder(z_dim=200,
-                  conv_filters=[32, 64, 64, 64],
+                  conv_filters=[64, 64, 32, 3],
                   conv_kernel_size=[3, 3, 3, 3],
                   conv_strides=[2, 2, 2, 2],
                   shape_before_flattening=encoder.shape_before_flattening,
@@ -64,16 +70,10 @@ vae = VAE(encoder=encoder,
 
 vae.compile(learning_rate=0.0005)
 
-LEARNING_RATE = 0.0005
-EPOCHS = 20
-PRINT_EVERY_N_BATCHES = 10
-
-INITIAL_EPOCH = 0
-
 vae.train_with_generator(
     x_train
-    , epochs=EPOCHS
+    , epochs=epochs
     , steps_per_epoch=int(x_train.samples / batch_size)
     , run_folder=run_folder
-    , print_every_n_batches=PRINT_EVERY_N_BATCHES
+    , print_every_n_batches=print_batches
 )

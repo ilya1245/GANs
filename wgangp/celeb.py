@@ -41,7 +41,9 @@ run_folder = io.prepare_wgangp_folders()
 logger.info("-------------------- New run of celeb WGANPG. Run folder: %s --------------------", run_folder)
 batch_size = cfg_exec['batch_size']
 
-x_train = io.load_celeb_data()
+cfg = config.cfg_wgangp
+x_train = io.load_celeb_data(cfg,
+                             ImageDataGenerator(preprocessing_function=lambda x: (x.astype('float32') - 127.5) / 127.5))
 
 generator = Generator(
     initial_dense_layer_size=(4, 4, 512)
@@ -95,10 +97,10 @@ else:
 
 wgangp.train(
     x_train
-    , batch_size = batch_size
-    , epochs = cfg_exec['epochs']
-    , run_folder = run_folder
-    , print_every_n_batches = cfg_exec['print_batches']
-    , n_critic = 5
-    , using_generator = True
+    , batch_size=batch_size
+    , epochs=cfg_exec['epochs']
+    , run_folder=run_folder
+    , print_every_n_batches=cfg_exec['print_batches']
+    , n_critic=5
+    , using_generator=True
 )
