@@ -11,12 +11,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from functools import partial
 
-from util import io_utils as io
+from util import logger as lgr
 from util import model_utils as mu
 from wgangp.model.generator import Generator
 from wgangp.model.critic import Critic
 
-logger = io.get_wgangp_logger(__name__)
+logger = lgr.get_wgangp_logger(__name__)
 
 
 class WGANGP():
@@ -41,7 +41,7 @@ class WGANGP():
 
         self._build_graph()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _build_graph(self):
         ### Construct Computational Graph for the Critic ###
 
@@ -102,7 +102,7 @@ class WGANGP():
 
         mu.set_trainable(self.critic.model, True)
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def train_critic(self, x_train, batch_size, using_generator):
 
         valid = np.ones((batch_size, 1), dtype=np.float32)
@@ -122,13 +122,13 @@ class WGANGP():
         d_loss = self.critic_model.train_on_batch([true_imgs, noise], [valid, fake, dummy])
         return d_loss
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def train_generator(self, batch_size):
         valid = np.ones((batch_size, 1), dtype=np.float32)
         noise = np.random.normal(0, 1, (batch_size, self.generator.z_dim))
         return self.generator_model.train_on_batch(noise, valid)
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def train(self, x_train, batch_size, epochs, run_folder, print_every_n_batches=10
               , n_critic=5
               , using_generator=False):
@@ -160,7 +160,7 @@ class WGANGP():
 
             self.epoch += 1
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def sample_images(self, run_folder):
         r, c = 5, 5
         noise = np.random.normal(0, 1, (r * c, self.generator.z_dim))
@@ -182,7 +182,7 @@ class WGANGP():
         fig.savefig(os.path.join(run_folder, "images/sample_%d.png" % self.epoch))
         plt.close()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def save(self, folder):
 
         with open(os.path.join(folder, 'params.pkl'), 'wb') as f:
@@ -212,7 +212,7 @@ class WGANGP():
 
         self.plot_model(folder)
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def plot_model(self, run_folder):
         plot_model(self.generator.model, to_file=os.path.join(run_folder, 'viz/generator.png'), show_shapes=True,
                    show_layer_names=True)
@@ -223,13 +223,13 @@ class WGANGP():
         # plot_model(self.critic_model, to_file=os.path.join(run_folder, 'viz/critic_model.png'), show_shapes=True,
         #            show_layer_names=True)
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def save_model(self, run_folder):
         self.generator.model.save(os.path.join(run_folder, 'generator.h5'))
         self.critic.model.save(os.path.join(run_folder, 'critic.h5'))
         self.generator_model.save(os.path.join(run_folder, 'generator_model.h5'))
         # self.critic_model.save(os.path.join(run_folder, 'critic_model.h5'))
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def load_weights(self, filepath):
         self.generator_model.load_weights(filepath)

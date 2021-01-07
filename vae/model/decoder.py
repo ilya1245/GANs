@@ -5,9 +5,9 @@ from tensorflow.keras.models import Model
 
 import numpy as np
 
-from util import io_utils as io
+from util import logger as lgr
 
-logger = io.get_vae_logger(__name__)
+logger = lgr.get_vae_logger(__name__)
 
 
 class Decoder():
@@ -31,7 +31,7 @@ class Decoder():
 
         self._build()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _build(self):
 
         input = Input(shape=(self.z_dim,), name='input')

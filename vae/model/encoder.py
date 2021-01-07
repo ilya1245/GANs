@@ -5,9 +5,9 @@ from tensorflow.keras.models import Model
 from tensorflow.keras import backend as K
 
 import util.model_utils as mu
-from util import io_utils as io
+from util import logger as lgr
 
-logger = io.get_vae_logger(__name__)
+logger = lgr.get_vae_logger(__name__)
 
 
 class Encoder():
@@ -31,7 +31,7 @@ class Encoder():
 
         self._build()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _build(self):
         input = Input(shape=self.input_dim, name='input')
 

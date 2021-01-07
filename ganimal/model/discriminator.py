@@ -4,9 +4,9 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.initializers import RandomNormal
 
 import util.model_utils as mu
-from util import io_utils as io
+from util import logger as lgr
 
-logger = io.get_camel_logger(__name__)
+logger = lgr.get_camel_logger(__name__)
 
 class Discriminator():
     def __init__(
@@ -38,7 +38,7 @@ class Discriminator():
         self.model = self._build()
         self._compile()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _build(self):
         input = Input(shape=self.input_dim)
         x = input
@@ -66,7 +66,7 @@ class Discriminator():
 
         return Model(input, x)
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _compile(self):
         self.model.compile(
             optimizer=mu.get_opti(self.optimiser, self.learning_rate)

@@ -31,9 +31,10 @@ from wgangp.model.wgangp import WGANGP
 # from model.gan import Gan
 
 from util import io_utils as io
+from util import logger as lgr
 from util import config
 
-logger = io.get_wgangp_logger("celeb.py")
+logger = lgr.get_wgangp_logger("celeb.py")
 cfg_exec = config.cfg_wgangp_exec
 
 io.project_root = PROJECT_ROOT

@@ -27,12 +27,13 @@ import numpy as np
 # import matplotlib.pyplot as plt
 import yaml
 from util import io_utils as io
+from util import logger as lgr
 from util import config
 from ganimal.model.generator import Generator
 from ganimal.model.discriminator import Discriminator
 from ganimal.model.gan import Gan
 
-logger = io.get_camel_logger("cammel.py")
+logger = lgr.get_camel_logger("cammel.py")
 cfg_exec = config.cfg_camel_exec
 
 io.project_root = PROJECT_ROOT

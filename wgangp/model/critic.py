@@ -4,11 +4,11 @@ from tensorflow.keras.layers import Input, Flatten, Conv2D, Dense, Conv2DTranspo
 from tensorflow.keras.models import Model
 from tensorflow.keras.initializers import RandomNormal
 
-from util import io_utils as io
+from util import logger as lgr
 import numpy as np
 import util.model_utils as mu
 
-logger = io.get_wgangp_logger(__name__)
+logger = lgr.get_wgangp_logger(__name__)
 
 
 class Critic():
@@ -37,7 +37,7 @@ class Critic():
 
         self.model = self._build()
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def _build(self):
 
         input = Input(shape=self.input_dim, name='input')

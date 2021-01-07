@@ -30,8 +30,9 @@ from vae.model.vae import VAE
 
 from util import io_utils as io
 from util import config
+from util import logger as lgr
 
-logger = io.get_vae_logger("vae_celeb.py")
+logger = lgr.get_vae_logger("vae_celeb.py")
 cfg_exec = config.cfg_vae_exec
 cfg_io = config.cfg_vae_io
 

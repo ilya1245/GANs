@@ -39,7 +39,7 @@ wgangp:
 
 camel:
   io:
-    data_folder: 'data'
+    data_folder: 'd:/Python_datasets/camel'
     data_file: full_numpy_bitmap_camel.npy
     section: gan
     run_id: '001'

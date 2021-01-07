@@ -1,9 +1,9 @@
 from tensorflow.keras.models import Model
 import tensorflow as tf
 
-from util import io_utils as io
+from util import logger as lgr
 
-logger = io.get_vae_logger(__name__)
+logger = lgr.get_vae_logger(__name__)
 
 
 class VaeModel(Model):
@@ -13,7 +13,7 @@ class VaeModel(Model):
         self.decoder = decoder
         self.r_loss_factor = r_loss_factor
 
-    @io.log_method_call(logger)
+    @lgr.log_method_call(logger)
     def train_step(self, data):
         if isinstance(data, tuple):
             data = data[0]
